@@ -14,6 +14,7 @@ function getTodoHtml(todoData) {
           <button class="todo-button save js-save-button" data-id="${todoData.id}" type="submit">Save</button>
         </div>
         <button class="todo-button delete js-delete-button" data-id="${todoData.id}" type="button">X</button>
+        <button class="todo-button complete js-complete-button" onclick="complete(${todoData.id})" data-id="${todoData.id} type="button">complete</button>
       </li>
     `;
   // return the built string back to the invoking function
@@ -100,6 +101,29 @@ function deleteTodo(id) {
     });
 }
 
+function complete(id) {
+  const todoField = document.querySelector(`.js-todo-item-${id}`);
+  axios
+    .put(`/api/todos/${id}`,{
+      name: todoField.value,
+    })
+      
+    
+    .then((res)=>{
+      // if(complete == true){
+      //   todoField.style.color = "red"
+      // }else{
+      //   todoField.style.color = "white"
+      // }
+
+
+    })
+    .catch((error) => {
+      const errorText = error.response.data.error || error;
+      alert('could not complete:' + errorText);
+    });
+}
+
 /**
  * Update the todo with the given ID. Text will be updated based on the input matching the id. Displays an alert if there is an error in the request.
  * @param {integer} id The ID of the todo to be updated.
@@ -162,6 +186,11 @@ document.addEventListener('click', (e) => {
     // pass the id to the `updateTodo()` function
     updateTodo(id);
   }
+  // if(e.target.classList.contains("js-complete-button")){
+  //   const id = e.target.dataset.id;
+  //   complete(id)
+
+  // }
 });
 
 // render the todos from the server onto the page
